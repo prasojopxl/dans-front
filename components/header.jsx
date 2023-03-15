@@ -5,11 +5,10 @@ import { useRouter } from "next/router"
 
 export default function Header() {
     const router = useRouter()
-    const Logout = () => {
+    const Logout = (e) => {
+        e.preventDefault()
         Cookies.remove("authDans")
-        router.push("/", {
-            shallow: true,
-        })
+        router.push("/")
     }
     return (
         <>
