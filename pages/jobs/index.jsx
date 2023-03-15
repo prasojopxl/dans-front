@@ -8,9 +8,11 @@ import moment from "moment"
 
 export default function jobs() {
     const [data, setData] = useState([])
-    const [jobsSearch, setJobSearch] = useState()
-    const [locationSearch, setLocationSearch] = useState()
+    const [allData, setAllData] = useState([])
+    const [jobsSearch, setJobSearch] = useState(false)
+    const [locationSearch, setLocationSearch] = useState(false)
     const [typeSearch, setTypeSearch] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
     const token = Cookies.get("authDans")
     const getData = () => {
         let config = {
@@ -19,17 +21,47 @@ export default function jobs() {
             },
         }
         axios
-            .get(`${apiUrl}/jobs`, config)
+            .get(`${apiUrl}/jobs?limit=4&page=${currentPage}`, config)
             .then((res) => {
                 setData(res.data.data)
+                setAllData(res.data)
             })
             .catch((error) => {
                 console.log(error)
             })
     }
+    const getSearch = () => {
+        let config = {
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+        }
+        axios
+            .get(
+                `${apiUrl}/jobs/search?${jobsSearch && "title=" + jobsSearch}&${
+                    locationSearch && "location=" + locationSearch
+                }&${typeSearch && "type=full time"}`,
+                config
+            )
+            .then((res) => {
+                setData(res.data.data)
+                setAllData(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+    const nextPage = () => {
+        currentPage == 2 ? setCurrentPage(2) : setCurrentPage(currentPage + 1)
+        getData()
+    }
+    const prevPage = () => {
+        currentPage == 1 ? setCurrentPage(1) : setCurrentPage(currentPage - 1)
+        getData
+    }
     useEffect(() => {
         getData()
-    }, [])
+    }, [currentPage])
     return (
         <Layout>
             <div className="py-12">
@@ -64,7 +96,10 @@ export default function jobs() {
                         <label className="block">Fulltime</label>
                     </div>
                     <div>
-                        <div className="bg-blue text-white cursor-pointer p-2">
+                        <div
+                            className="bg-blue text-white cursor-pointer p-2"
+                            onClick={getSearch}
+                        >
                             Search
                         </div>
                     </div>
@@ -101,6 +136,21 @@ export default function jobs() {
                         </div>
                     )
                 })}
+                <div className="flex justify-center space-x-2 items-center">
+                    <div
+                        className="bg-blue text-white py-2 px-5 cursor-pointer"
+                        onClick={prevPage}
+                    >
+                        Back
+                    </div>
+                    <div className="mx-1">Page:{allData.page}</div>
+                    <div
+                        className="bg-blue text-white py-2 px-5 cursor-pointer"
+                        onClick={nextPage}
+                    >
+                        Next
+                    </div>
+                </div>
             </div>
         </Layout>
     )
