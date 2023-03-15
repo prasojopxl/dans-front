@@ -1,8 +1,49 @@
-import React from "react"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import axios from "axios"
+import Cookies from "js-cookie"
+import { useRouter } from "next/router"
 
 export default function Login() {
+    const [username, setUsername] = useState(null)
+    const [password, setPassword] = useState(null)
+    const [errorMessage, setErrorMessage] = useState(false)
+    const [message, setMessage] = useState(null)
+    const router = useRouter()
+    const getLogin = (username, password) => {
+        axios
+            .post(`http://localhost:9000/auth/login`, {
+                email: username,
+                password: password,
+            })
+            .then((res) => {
+                setErrorMessage(false)
+                Cookies.set("authDans", res.data.token)
+                router.push("/", {
+                    shallow: true,
+                })
+            })
+            .catch((error) => {
+                setErrorMessage(true)
+                setMessage(error.response.data.message)
+            })
+    }
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
+    const onSubmit = (data) => {
+        getLogin(data.username, data.password)
+    }
+    useEffect(() => {
+        const subscription = watch((value, { name, type }) => {})
+        return () => subscription.unsubscribe()
+    }, [watch])
     return (
-        <section classNameName="gradient-form h-full bg-neutral-200 dark:bg-neutral-700">
+        <section className="gradient-form h-full bg-neutral-200 dark:bg-neutral-700">
             <div className="container h-full p-10">
                 <div className="g-6 flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
                     <div className="w-full">
@@ -11,16 +52,18 @@ export default function Login() {
                                 <div className="px-4 md:px-0 lg:w-6/12">
                                     <div className="md:mx-6 md:p-12">
                                         <div className="text-center">
-                                            <img
+                                            <Image
                                                 className="mx-auto w-48"
                                                 src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
                                                 alt="logo"
+                                                width={200}
+                                                height={100}
                                             />
                                             <h4 className="mt-1 mb-12 pb-1 text-xl font-semibold">
                                                 Get Job With Dans Multi Pro
                                             </h4>
                                         </div>
-                                        <form>
+                                        <form onSubmit={handleSubmit(onSubmit)}>
                                             <p className="mb-4">
                                                 Please login to your account
                                             </p>
@@ -33,6 +76,9 @@ export default function Login() {
                                                     className="peer block min-h-[auto] w-full rounded border border-solid bg-transparent py-[0.32rem] px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                                     id="exampleFormControlInput1"
                                                     placeholder="Email"
+                                                    {...register("username", {
+                                                        required: true,
+                                                    })}
                                                 />
                                                 <label
                                                     for="exampleFormControlInput1"
@@ -50,6 +96,9 @@ export default function Login() {
                                                     className="peer block min-h-[auto] w-full rounded border border-solid bg-transparent py-[0.32rem] px-3 leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                                                     id="exampleFormControlInput11"
                                                     placeholder="Password"
+                                                    {...register("password", {
+                                                        required: true,
+                                                    })}
                                                 />
                                                 <label
                                                     for="exampleFormControlInput11"
@@ -58,25 +107,28 @@ export default function Login() {
                                                     Password
                                                 </label>
                                             </div>
+                                            {errorMessage && (
+                                                <div className="text-red text-sm capitalize">
+                                                    {message}
+                                                </div>
+                                            )}
                                             <div className="mb-12 pt-1 pb-1 text-center">
-                                                <button
+                                                <input
+                                                    type="submit"
                                                     className="mb-3 inline-block w-full rounded  px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]"
-                                                    type="button"
+                                                    value="Login"
                                                     data-te-ripple-init
                                                     data-te-ripple-color="light"
                                                     style={{
                                                         background: "#2F61AF",
                                                     }}
-                                                >
-                                                    Log in
-                                                </button>
+                                                />
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                                 <div
                                     className="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-r-lg lg:rounded-bl-none"
-                                    stye
                                     style={{ background: "#2F61AF" }}
                                 >
                                     <div className="px-4 py-6 text-white md:mx-6 md:p-12">
