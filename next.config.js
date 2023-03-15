@@ -2,17 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'tecdn.b-cdn.net',
-      },
-    ],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'dummyimage.com',
-      },
+    domains: [
+      "localhost",
+      "dans.stagingaja.com",
+      "tecdn.b-cdn.net",
+      "dummyimage.com",
     ],
   },
   env: {
