@@ -8,6 +8,7 @@ export default function Header() {
     const Logout = () => {
         router.push("/")
         Cookies.remove("authDans")
+        router.reload(window.location.pathname)
     }
     return (
         <>
