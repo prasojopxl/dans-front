@@ -21,7 +21,7 @@ export default function Login() {
             .then((res) => {
                 setErrorMessage(false)
                 Cookies.set("authDans", res.data.token)
-                router.push("/jobs", {
+                router.push("/", {
                     shallow: true,
                 })
             })
