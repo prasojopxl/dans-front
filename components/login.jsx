@@ -21,13 +21,13 @@ export default function Login() {
             .then((res) => {
                 setErrorMessage(false)
                 Cookies.set("authDans", res.data.token)
-                router.push("/", {
+                router.push("/jobs", {
                     shallow: true,
                 })
             })
             .catch((error) => {
                 setErrorMessage(true)
-                setMessage(error.response.data.message)
+                setMessage("Periksa username dan password")
             })
     }
     const {
@@ -63,7 +63,6 @@ export default function Login() {
                                             <h4 className="mt-1 mb-12 pb-1 text-xl font-semibold">
                                                 Get Job With Dans Multi Pro
                                             </h4>
-                                            {console.log(apiUrl)}
                                         </div>
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <p className="mb-4">
