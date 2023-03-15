@@ -1,23 +1,28 @@
-import Image from "next/image"
-import { HiMenuAlt3 } from "react-icons/hi"
 import Link from "next/link"
-import React, { useState } from "react"
+import React from "react"
+import Cookies from "js-cookie"
+import { useRouter } from "next/router"
 
 export default function Header() {
-    const [menu, setMenu] = useState(false)
-    const changeMenu = () => {
-        menu ? setMenu(false) : setMenu(true)
+    const router = useRouter()
+    const Logout = () => {
+        Cookies.remove("authDans")
+        router.push("/", {
+            shallow: true,
+        })
     }
     return (
         <>
-            <div className="header absolute left-0 top-0 right-0">
-                <div className="container mx-auto  flex justify-between items-center">
+            <div className="header absolute left-0 top-2 right-0">
+                <div className="container mx-auto flex justify-between items-center">
                     <Link href="/" className="flex items-center">
-                        <div className="bg-white rounded-full overflow-hidden p-2 w-[100px] h-[100px] mr-[10px]">
-                            JOBS
+                        <div className="bg-white rounded-full overflow-hidden p-2 w-[50px] h-[50px] mr-[10px] flex justify-center items-center font-bold text-[12px]">
+                            DANS
                         </div>
                     </Link>
-                    <div>Logout</div>
+                    <div className="cursor-pointer text-white" onClick={Logout}>
+                        Logout
+                    </div>
                 </div>
             </div>
         </>
