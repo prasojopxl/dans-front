@@ -8,6 +8,16 @@ const nextConfig = {
         hostname: 'tecdn.b-cdn.net',
       },
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'dummyimage.com',
+      },
+    ],
+  },
+  env: {
+    API_URL: process.env.API_URL,
+    TEST: process.env.TEST,
   },
 }
 

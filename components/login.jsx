@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import axios from "axios"
 import Cookies from "js-cookie"
 import { useRouter } from "next/router"
+import { apiUrl } from "@/utils"
 
 export default function Login() {
     const [username, setUsername] = useState(null)
@@ -13,7 +14,7 @@ export default function Login() {
     const router = useRouter()
     const getLogin = (username, password) => {
         axios
-            .post(`http://localhost:9000/auth/login`, {
+            .post(`${apiUrl}/auth/login`, {
                 email: username,
                 password: password,
             })
@@ -43,7 +44,7 @@ export default function Login() {
         return () => subscription.unsubscribe()
     }, [watch])
     return (
-        <section className="gradient-form h-full bg-neutral-200 dark:bg-neutral-700 w-full">
+        <div className="gradient-form h-full bg-neutral-200 dark:bg-neutral-700 w-full">
             <div className="container h-full p-10">
                 <div className="g-6 flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200">
                     <div className="w-full">
@@ -62,6 +63,7 @@ export default function Login() {
                                             <h4 className="mt-1 mb-12 pb-1 text-xl font-semibold">
                                                 Get Job With Dans Multi Pro
                                             </h4>
+                                            {console.log(apiUrl)}
                                         </div>
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <p className="mb-4">
@@ -81,7 +83,7 @@ export default function Login() {
                                                     })}
                                                 />
                                                 <label
-                                                    for="exampleFormControlInput1"
+                                                    htmlFor="exampleFormControlInput1"
                                                     className="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-blue-600 peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-neutral-200"
                                                 >
                                                     Email
@@ -101,7 +103,7 @@ export default function Login() {
                                                     })}
                                                 />
                                                 <label
-                                                    for="exampleFormControlInput11"
+                                                    htmlFor="exampleFormControlInput11"
                                                     className="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-blue-600 peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-neutral-200"
                                                 >
                                                     Password
@@ -151,6 +153,6 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     )
 }

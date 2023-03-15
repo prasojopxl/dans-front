@@ -111,8 +111,16 @@ body {
 body {
 }
 
+p {
+    @apply mb-[20px];
+}
+
+ul {
+    @apply block;
+}
+
 a {
-    color: inherit;
+    @apply text-blue;
     text-decoration: none;
 }
 
